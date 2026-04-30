@@ -1,0 +1,12 @@
+{
+  "name": "Arsya OSN Lab",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "postCreateCommand": "docker run -d -p 3000:8080 -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:ollama",
+  "forwardPorts": ,
+  "portsAttributes": {
+    "3000": { "label": "Open WebUI - Klik ini" }
+  }
+}
