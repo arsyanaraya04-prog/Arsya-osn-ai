@@ -1,18 +1,16 @@
 {
   "name": "OSN Lab Hemat Storage",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
-  "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
-  },
   "runArgs": [
     "--device=/dev/net/tun",
+    "--device=/dev/kvm",
     "--cap-add=NET_ADMIN",
     "--cap-add=NET_RAW",
     "--add-host=host.docker.internal:host-gateway"
   ],
   "remoteUser": "root",
-  "postCreateCommand": "apt-get update && apt-get install -y curl && curl -fsSL https://tailscale.com/install.sh | sh && curl -fsSL https://ollama.com/install.sh | sh && docker run -d -netowork=host -e OLLAMA_BASE_URL=http://host.docker.internal:11434 -v open-webui:/app/backend/data --add-host=host.docker.internal:host-gateway --name open-webui --restart always ghcr.io/open-webui/open-webui:main",
-  "postStartCommand": "nohup tailscaled > /var/log/tailscaled.log 2>&1 & disown && nohup bash -c 'OLLAMA_HOST=0.0.0.0:11434 ollama serve' > /var/log/ollama.log 2>&1 & disown && sleep 5 && tailscale up --authkey=tskey-auth-xxx --hostname=codespace-osn --ssh && sleep 10 && ollama pull qwen2:0.5b",
+  "postCreateCommand": "apt-get update && apt-get install -y curl && curl -fsSL https://tailscale.com/install.sh | sh",
+  "postStartCommand": "sudo chmod 666 /dev/kvm",
   "forwardPorts": [3000, 11434],
   "portsAttributes": {
     "3000": { "label": "Open WebUI", "onAutoForward": "openBrowser" },
